@@ -1,0 +1,51 @@
+// This #include statement was automatically added by the Particle IDE.
+#include <ThingSpeak.h>
+
+// This #include statement was automatically added by the Particle IDE.
+#include <thingspeak-webhooks.h>
+
+// Pin Definitions
+#define HCSR04_PIN_TRIG	D2
+#define HCSR04_PIN_ECHO	D6
+
+int led = D4;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+ 
+  pinMode(HCSR04_PIN_TRIG, OUTPUT);
+  pinMode(HCSR04_PIN_ECHO, INPUT);
+  pinMode(led, OUTPUT);
+  digitalWrite(led, LOW);
+
+ 
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  long timed, distance;
+  digitalWrite(HCSR04_PIN_TRIG, LOW);
+  digitalWrite(HCSR04_PIN_TRIG, HIGH);
+  digitalWrite(HCSR04_PIN_TRIG, LOW);
+  timed = pulseIn(HCSR04_PIN_ECHO, HIGH);
+  distance = (timed/2)/29.1;
+
+
+    if(distance<=8)
+    {
+       String proximity = String(1);
+       Particle.publish("Proximity", proximity, PRIVATE);
+       digitalWrite(led,HIGH);
+       
+    }
+    else
+    {
+      String proximity = String(2);
+      Particle.publish("Proximity", proximity, PRIVATE);
+      digitalWrite(led,LOW);
+    }
+    delay(16000);
+   }
+        
+        
